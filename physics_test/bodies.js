@@ -44,3 +44,23 @@ class Obstacle {
         pop();
     }
 }
+
+class DrawnPolygon {
+    constructor(coordinateList, world) {
+        // coordinate list needs to be normalised
+        let minValue = null;
+        for (let c of coordinateList) {
+            if (!minValue || c.x < minValue) {
+                minValue = c.x;
+            }
+            if (c.y < minValue) {
+                minValue = c.y
+            }
+        }
+        let normCoordinateList = [];
+        for (let c of coordinateList) {
+            normCoordinateList.push({'x': c.x - minValue, 'y': c.y - minValue})
+        }
+        console.log(normCoordinateList)
+    }
+}

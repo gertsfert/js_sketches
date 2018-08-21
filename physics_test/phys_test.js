@@ -6,6 +6,7 @@ var Engine = Matter.Engine,
 var engine;
 var world;
 var boxes = [];
+var drawnPolygons = [];
 var obstacles = [];
 var polygonDrawMode = false;
 var drawnPolygon = [];
@@ -83,6 +84,9 @@ function mousePressed() {
         if (polygonDrawMode) {
             // finish drawing polygon
             drawnPolygon.push(new Coordinate(drawnPolygon[0].x, drawnPolygon[0].y));
+
+            // create custom polygon
+            new DrawnPolygon(drawnPolygon, world);
         }
         polygonDrawMode = !polygonDrawMode;
     }
