@@ -20,7 +20,7 @@ const CURSOR_SIZE = 20;
 document.addEventListener('contextmenu', event => event.preventDefault());
 
 function setup() {
-    createCanvas(400, 400);
+    createCanvas(displayWidth, displayHeight/3);
     engine = Engine.create();
     world = engine.world;
     createObstacles();
@@ -29,7 +29,7 @@ function setup() {
 }
 
 function createObstacles() {
-    obstacles.push(new Obstacle(width/2, height, width, 40, world))
+    obstacles.push(new Obstacle(width/2, height+190, width, 400, world))
 }
 
 function draw() {
@@ -40,6 +40,10 @@ function draw() {
     }
 
     for (let i of obstacles) {
+        i.show();
+    }
+
+    for (let i of drawnPolygons) {
         i.show();
     }
 
@@ -82,11 +86,15 @@ function mousePressed() {
     } else if (mouseButton == RIGHT) {
         // enter polygon draw mode
         if (polygonDrawMode) {
-            // finish drawing polygon
-            drawnPolygon.push(new Coordinate(drawnPolygon[0].x, drawnPolygon[0].y));
 
-            // create custom polygon
-            new DrawnPolygon(drawnPolygon, world);
+            if (drawnPolygon.length > 2) {
+                // finish drawing polygon
+                drawnPolygon.push(new Coordinate(mouseX, mouseY));
+        
+                // create custom polygon
+                drawnPolygons.push(new DrawnPolygon(drawnPolygon, world));
+            }
+            drawnPolygon = [];
         }
         polygonDrawMode = !polygonDrawMode;
     }

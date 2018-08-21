@@ -47,8 +47,14 @@ class Obstacle {
 
 class DrawnPolygon {
     constructor(coordinateList, world) {
+        const options = {
+            'density': 0.00001
+        }
+        
         // coordinate list needs to be normalised
         let minValue = null;
+        
+        // need sums to get average coordinates (for center point)
         for (let c of coordinateList) {
             if (!minValue || c.x < minValue) {
                 minValue = c.x;
@@ -57,10 +63,37 @@ class DrawnPolygon {
                 minValue = c.y
             }
         }
-        let normCoordinateList = [];
+
+        let vertList = [];
         for (let c of coordinateList) {
-            normCoordinateList.push({'x': c.x - minValue, 'y': c.y - minValue})
+            vertList.push({x: c.x, y: c.y})
         }
-        console.log(normCoordinateList)
+        
+        let vertices = Matter.Vertices.clockwiseSort(vertList);
+        vertices = Matter.Vertices.create(vertices);
+        let centre = Matter.Vertices.centre(vertices)
+        
+        for (let v of vertices) {
+            v.x -= minValue;
+            v.y -=minValue;
+        }
+        console.log(vertices);
+
+        this.body = Bodies.fromVertices(width/2, 0, vertices, options);
+        World.add(world, this.body);
+        this.world = world;
+        console.log(this.body.position);
+    }
+
+    show() {
+        push();
+        stroke(180);
+        strokeWeight(3);
+        beginShape();
+        for (let p of this.body.vertices) {
+            vertex([p.x, p.y])
+        }
+        endShape();
+        pop();
     }
 }
