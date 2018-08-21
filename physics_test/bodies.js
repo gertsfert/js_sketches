@@ -48,7 +48,7 @@ class Obstacle {
 class DrawnPolygon {
     constructor(coordinateList, world) {
         const options = {
-            'density': 0.00001
+            'density': 0.0001
         }
         
         // coordinate list needs to be normalised
@@ -79,7 +79,7 @@ class DrawnPolygon {
         }
         console.log(vertices);
 
-        this.body = Bodies.fromVertices(width/2, 0, vertices, options);
+        this.body = Bodies.fromVertices(centre.x, centre.y, vertices, options);
         World.add(world, this.body);
         this.world = world;
         console.log(this.body.position);
@@ -91,9 +91,9 @@ class DrawnPolygon {
         strokeWeight(3);
         beginShape();
         for (let p of this.body.vertices) {
-            vertex([p.x, p.y])
+            vertex(p.x, p.y);
         }
-        endShape();
+        endShape(CLOSE);
         pop();
     }
 }
