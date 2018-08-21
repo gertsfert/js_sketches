@@ -16,11 +16,12 @@ const RECT_HEIGHT = 80;
 
 const CURSOR_SIZE = 20;
 
+
 // prevent right click
 document.addEventListener('contextmenu', event => event.preventDefault());
 
 function setup() {
-    createCanvas(displayWidth, displayHeight/3);
+    createCanvas(500, 500);
     engine = Engine.create();
     world = engine.world;
     createObstacles();
@@ -59,7 +60,7 @@ function draw() {
         // draw polygon
         for (let i=0; i < drawnPolygon.length; i++) {
             push();
-            stroke([0, 210, 210]);
+            stroke([0, 210, 20]);
             strokeWeight(8);
             point(drawnPolygon[i].x, drawnPolygon[i].y);
             pop();
