@@ -9,7 +9,7 @@ class Boxey {
     }
 
     show() {
-        rectMode(CENTER)
+        rectMode(CENTER);
         var pos = this.body.position;
         var angle = this.body.angle;
 
@@ -33,7 +33,7 @@ class Obstacle {
         this.world = world;
     }
 
-    show() {
+    show() {``
         rectMode(CENTER)
         var pos = this.body.position;
 

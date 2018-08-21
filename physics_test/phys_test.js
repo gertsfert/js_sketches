@@ -7,9 +7,16 @@ var engine;
 var world;
 var boxes = [];
 var obstacles = [];
+var polygonDrawMode = false;
+var drawnPolygon = [];
 
 const RECT_WIDTH = 80;
 const RECT_HEIGHT = 80;
+
+const CURSOR_SIZE = 20;
+
+// prevent right click
+document.addEventListener('contextmenu', event => event.preventDefault());
 
 function setup() {
     createCanvas(400, 400);
@@ -34,8 +41,56 @@ function draw() {
     for (let i of obstacles) {
         i.show();
     }
+
+    if (polygonDrawMode) {
+        // draw cursor
+        push();
+        stroke([0, 210, 20]);
+        strokeWeight(4);
+        line(mouseX, mouseY - CURSOR_SIZE/2, mouseX, mouseY + CURSOR_SIZE/2);
+        line(mouseX - CURSOR_SIZE/2, mouseY, mouseX + CURSOR_SIZE/2, mouseY);
+        pop();
+
+        // draw polygon
+        for (let i=0; i < drawnPolygon.length; i++) {
+            push();
+            stroke([0, 210, 210]);
+            strokeWeight(8);
+            point(drawnPolygon[i].x, drawnPolygon[i].y);
+            pop();
+            push();
+            stroke(255);
+            strokeWeight(4);
+            if (i != 0) {
+                line(drawnPolygon[i].x, drawnPolygon[i].y, drawnPolygon[i-1].x, drawnPolygon[i-1].y)
+            }
+            pop();
+        }
+    }
 }
 
 function mousePressed() {
-    boxes.push(new Boxey(mouseX, mouseY, 20, 20, world))
+    if (mouseButton == LEFT) {
+        if (!polygonDrawMode) {
+            // spawn new box
+            boxes.push(new Boxey(mouseX, mouseY, 20, 20, world));
+        } else {
+            // place new point in drawnPolygon
+            drawnPolygon.push(new Coordinate(mouseX, mouseY));
+        }
+    } else if (mouseButton == RIGHT) {
+        // enter polygon draw mode
+        if (polygonDrawMode) {
+            // finish drawing polygon
+            drawnPolygon.push(new Coordinate(drawnPolygon[0].x, drawnPolygon[0].y));
+        }
+        polygonDrawMode = !polygonDrawMode;
+    }
+}
+
+class Coordinate{
+    constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    }
 }
