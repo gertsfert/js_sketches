@@ -5,7 +5,7 @@ var Engine = Matter.Engine,
 
 var engine;
 var world;
-var boxes = [];
+var droplets = [];
 var drawnPolygons = [];
 var obstacles = [];
 var polygonDrawMode = false;
@@ -24,7 +24,6 @@ function setup() {
     createCanvas(500, 500);
     engine = Engine.create();
     world = engine.world;
-    createObstacles();
     Engine.run(engine);
 }
 
@@ -35,52 +34,70 @@ function createObstacles() {
 function draw() {
     background(0);
 
-    for (let i of droplets) {
-        i.show();
+    for (let i = 0; i<3; i++) {
+        spawnDroplet();
     }
 
-    for (let i of obstacles) {
-        i.show();
-    }
-
-    for (let i of drawnPolygons) {
-        i.show();
-    }
+    renderObjectList(drawnPolygons);
+    renderObjectList(droplets);
+    renderObjectList(obstacles);
 
     if (polygonDrawMode) {
-        // draw cursor
-        push();
-        stroke([0, 210, 20]);
-        strokeWeight(4);
-        line(mouseX, mouseY - CURSOR_SIZE/2, mouseX, mouseY + CURSOR_SIZE/2);
-        line(mouseX - CURSOR_SIZE/2, mouseY, mouseX + CURSOR_SIZE/2, mouseY);
-        pop();
+        drawCursor();
+        renderPolygonDrawMode();
+    }
+}
 
-        // draw polygon
-        for (let i=0; i < drawnPolygon.length; i++) {
-            push();
-            stroke([0, 210, 20]);
-            strokeWeight(8);
-            point(drawnPolygon[i].x, drawnPolygon[i].y);
-            pop();
-            push();
-            stroke(255);
-            strokeWeight(4);
-            if (i != 0) {
-                line(drawnPolygon[i].x, drawnPolygon[i].y, drawnPolygon[i-1].x, drawnPolygon[i-1].y)
-            }
-            pop();
+function spawnDroplet(){
+    droplets.push(new Droplet(random(width/4, width*0.75), 0, 3, world));
+}
+
+function renderObjectList(objectList) {
+    for (let i = objectList.length - 1; i >= 0; i--) {
+        if (objectList[i].toDelete) {
+            objectList.splice(i, 1);
+        } else {
+            objectList[i].show();
         }
     }
+}
+
+function renderPolygonDrawMode() {
+    for (let i=0; i < drawnPolygon.length; i++) {
+        push();
+        stroke([0, 210, 20]);
+        strokeWeight(8);
+        point(drawnPolygon[i].x, drawnPolygon[i].y);
+        pop();
+        push();
+        stroke(255);
+        strokeWeight(4);
+        if (i != 0) {
+            line(drawnPolygon[i].x, drawnPolygon[i].y, drawnPolygon[i-1].x, drawnPolygon[i-1].y)
+        }
+        pop();
+    }
+}
+
+function drawCursor() {
+    push();
+    stroke([0, 210, 20]);
+    strokeWeight(4);
+    line(mouseX, mouseY - CURSOR_SIZE/2, mouseX, mouseY + CURSOR_SIZE/2);
+    line(mouseX - CURSOR_SIZE/2, mouseY, mouseX + CURSOR_SIZE/2, mouseY);
+    pop();
 }
 
 function mousePressed() {
     if (mouseButton == LEFT) {
         if (!polygonDrawMode) {
-            // spawn new box
-            boxes.push(new Boxey(mouseX, mouseY, 20, 20, world));
+            // delete any polygon that the mouse is touching
+            for (let i of drawnPolygons){
+                if (i.isInside(mouseX, mouseY)) {
+                    i.toDelete = true;
+                }
+            }
         } else {
-            // place new point in drawnPolygon
             drawnPolygon.push(new Coordinate(mouseX, mouseY));
         }
     } else if (mouseButton == RIGHT) {
