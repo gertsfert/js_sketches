@@ -18,7 +18,8 @@ function draw() {
 }
 
 function randColour() {
-    return [random(255), random(255), random(255)]
+    colorMode(HSB, 360)
+    return [random(360), 360, 360]
 }
 
 class Ball {

@@ -35,6 +35,7 @@ class Bubble {
     }
 
     draw() {
+        colorMode(HSB, 360);
         stroke(this.color);
         strokeWeight(4);
         fill(this.color)
@@ -69,7 +70,7 @@ class Bubble {
         if (this.y > height || this.y < 0){
             heading.html(random(headings));
             this.y = height;
-            this.color = [floor(random(255)), floor(random(255)), floor(random(255))]
+            this.color = [floor(random(360)), 360, 360];
             this.velY = -random() * 0.1;
         }
         if (this.x > width) {
@@ -99,6 +100,8 @@ function setup() {
     createCanvas(600, 400);
 }
 
+colorMode(HSB, 360);
+
 
 function draw() {
     if (counter % changeRate == 0) {
@@ -107,7 +110,7 @@ function draw() {
         }
         counter = 0;
     }
-    background(255);
+    background(360);
     for (let box of bubbles) {
         box.draw();
         box.update();
@@ -117,7 +120,7 @@ function draw() {
 
 
 function mousePressed() {
-    bubbles.push(new Bubble(mouseX, height, 30, [floor(random(255)), floor(random(255)), floor(random(255))]))
+    bubbles.push(new Bubble(mouseX, height, 30, [floor(random(360)), 360, 360]))
 
     if (bubbles.length > maxBubbles) {
         bubbles.shift();
