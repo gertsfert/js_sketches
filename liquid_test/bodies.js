@@ -48,7 +48,7 @@ class Obstacle {
 class DrawnPolygon {
     constructor(coordinateList, world) {
         const options = {
-            'density': 0.0001
+            'isStatic': true
         }
         
         // coordinate list needs to be normalised

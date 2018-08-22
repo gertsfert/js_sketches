@@ -25,7 +25,6 @@ function setup() {
     engine = Engine.create();
     world = engine.world;
     createObstacles();
-    boxes.push(new Boxey(width/2, height/2, RECT_WIDTH, RECT_HEIGHT, world));
     Engine.run(engine);
 }
 
@@ -36,7 +35,7 @@ function createObstacles() {
 function draw() {
     background(0);
 
-    for (let i of boxes) {
+    for (let i of droplets) {
         i.show();
     }
 
