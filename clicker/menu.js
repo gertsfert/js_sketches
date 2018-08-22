@@ -6,7 +6,8 @@ class MenuBar{
         this.h = h;
         this.bgColor = 51;
 
-        this.buttons = [];
+        this.buttons = []; // array of dicts. will have 'button' and 'fn' key 
+                           // for the button object and click function
     }
 
     draw() {

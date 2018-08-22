@@ -1,5 +1,4 @@
-var clicks = 0;
-var balls = [];
+var clicks = 800;
 
 // prevent double click text selection
 document.addEventListener('mousedown', function (event) {
@@ -12,7 +11,7 @@ function preload() {
     buttonUpPink = loadImage('Buttons/button_up_pink.png');
     buttonDownPink = loadImage('Buttons/button_down_pink.png');
     
-    buttons = {
+    buttonImages = {
         'pink': {'up': loadImage('Buttons/button_up_pink.png'),
                  'down': loadImage('Buttons/button_down_pink.png')},
         'aqua': {'up': loadImage('Buttons/button_up_aqua.png'),
@@ -27,19 +26,29 @@ function preload() {
 function setup() {
     clickString = createDiv('Clicks: 0')
     createCanvas(600, 400);
-    clicky = new ClickButton(20, 20, 80, 40, 'clicky', buttons['pink']);
+    clicky = new ClickButton(20, 20, 80, 40, 'clicky', buttonImages['pink']);
 
     bottomMenu = new MenuBar(0, height - 80, width, 80, 51);
-    bottomMenu.addButton(10, bottomMenu.y + 5, 80, 30, '(10) Ball++', 
-        buttons['green'], addBall);
+
 }
 
 function draw() {
     background(255);
     clicky.draw();
     bottomMenu.draw();
+    for (let b of balls) {
+        b.update();
+        if (b.hasTouchedButton(clicky)) {
+            clicks += b.value;
+            b.respawn();
+        }
+        b.draw();
+    }
     clickString.html('Clicks: ' + clicks);
+    checkForUpgrades();
 }
+
+
 
 function mousePressed() {
     if (clicky.mouseIsOverSelf()) {
@@ -53,8 +62,6 @@ function mousePressed() {
     }
 }
 
-function addBall() {
-    if (clicks >= 10) {
-        clicks -= 10;
-    }
+function message(msg) {
+    console.log(msg);
 }
