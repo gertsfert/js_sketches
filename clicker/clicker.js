@@ -45,7 +45,9 @@ function draw() {
         b.draw();
     }
     clickString.html('Clicks: ' + clicks);
-    checkForUpgrades();
+    if (frameCount % 360 == 0) {
+        checkForUpgrades();
+    }
 }
 
 

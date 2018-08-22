@@ -21,7 +21,8 @@ class Ball{
         fill(this.color);
         strokeWeight(2);
         stroke(0);
-        ellipse(this.x, this.y, this.r * 2);
+        rectMode(CENTER)
+        rect(this.x, this.y, this.r * 2, this.r * 2);
         fill(0);
         textAlign(CENTER, CENTER);
         text(this.value, this.x, this.y);
@@ -82,7 +83,7 @@ function checkForUpgrades() {
 function addBall() {
     if (clicks >= 10 && frameCount > upgradeLastClicked + 10) {
         clicks -= 10;
-        balls.push(new Ball(clicky.x + clicky.w/2, height - bottomMenu.h, 10, 0, -1, [200, 60, 255, 60]));
+        balls.push(new Ball(random(width), height - bottomMenu.h, 10, random([-1,1]), -1, [200, 60, 255, 60]));
         upgradeLastClicked = frameCount;
     }
 }
