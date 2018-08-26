@@ -38,7 +38,7 @@ function draw() {
     bottomMenu.draw();
     for (let b of balls) {
         b.update();
-        if (b.hasTouchedButton(clicky)) {
+        if (b.hasTouchedButton(clicky)) {   q
             clicks += b.value;
             b.respawn();
         }
